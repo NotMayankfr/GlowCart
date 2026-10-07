@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/glowcart
+    username: ${DB_USER:glowcart}
+    password: ${DB_PASS:glowcart}
+  data:
+    redis:
+      host: localhost
+      port: 6379

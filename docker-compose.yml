@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: glowcart
+      POSTGRES_USER: glowcart
+      POSTGRES_PASSWORD: glowcart
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/glowcart
+      SPRING_DATASOURCE_USERNAME: glowcart
+      SPRING_DATASOURCE_PASSWORD: glowcart
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-dGhpcy1pcy1hLXZlcnktc2VjdXJlLWFuZC1sb25nLWp3dC1zZWNyZXQta2V5LXRoYXQtaXMtYXQtbGVhc3QtNjQtYnl0ZXMtbG9uZy1mb3ItaHM1MTI=}
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  pgdata:

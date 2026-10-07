@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: dev
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_batch_fetch_size: 20
+        format_sql: true
+
+jwt:
+  secret: ${JWT_SECRET:dGhpcy1pcy1hLXZlcnktc2VjdXJlLWFuZC1sb25nLWp3dC1zZWNyZXQta2V5LXRoYXQtaXMtYXQtbGVhc3QtNjQtYnl0ZXMtbG9uZy1mb3ItaHM1MTI=}
+  expirationMs: 86400000 # 24 hours
