@@ -24,7 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
           AND (:brandId IS NULL OR p.brand.id = :brandId)
           AND (:minPrice IS NULL OR p.price >= :minPrice)
           AND (:maxPrice IS NULL OR p.price <= :maxPrice)
-          AND (:search IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')))
+          AND (CAST(:search AS string) IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%')))
     """,
     countQuery = """
         SELECT count(p) FROM Product p
@@ -33,7 +33,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
           AND (:brandId IS NULL OR p.brand.id = :brandId)
           AND (:minPrice IS NULL OR p.price >= :minPrice)
           AND (:maxPrice IS NULL OR p.price <= :maxPrice)
-          AND (:search IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')))
+          AND (CAST(:search AS string) IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', CAST(:search AS string), '%')))
     """)
     Page<Product> findFiltered(
         @Param("categoryId") Long categoryId,
