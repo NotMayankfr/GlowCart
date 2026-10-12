@@ -129,10 +129,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGenericException(Exception ex) {
         log.error("Unhandled server exception: ", ex);
+        String message = ex.getMessage() != null ? ex.getMessage() : ex.getClass().getSimpleName();
         ApiError error = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
-                "An unexpected server error occurred. Please check logs for details.",
+                message,
                 null,
                 Instant.now()
         );

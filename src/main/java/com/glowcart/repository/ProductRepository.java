@@ -12,16 +12,28 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Optional<Product> findBySlug(String slug);
+    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.category LEFT JOIN FETCH p.brand WHERE p.slug = :slug")
+    Optional<Product> findBySlug(@Param("slug") String slug);
 
-    @Query("""
+    @Query(value = """
         SELECT p FROM Product p
+        LEFT JOIN FETCH p.category
+        LEFT JOIN FETCH p.brand
         WHERE p.active = true
           AND (:categoryId IS NULL OR p.category.id = :categoryId)
-          AND (:brandId    IS NULL OR p.brand.id    = :brandId)
-          AND (:minPrice   IS NULL OR p.price >= :minPrice)
-          AND (:maxPrice   IS NULL OR p.price <= :maxPrice)
-          AND (:search     IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')))
+          AND (:brandId IS NULL OR p.brand.id = :brandId)
+          AND (:minPrice IS NULL OR p.price >= :minPrice)
+          AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+          AND (:search IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')))
+    """,
+    countQuery = """
+        SELECT count(p) FROM Product p
+        WHERE p.active = true
+          AND (:categoryId IS NULL OR p.category.id = :categoryId)
+          AND (:brandId IS NULL OR p.brand.id = :brandId)
+          AND (:minPrice IS NULL OR p.price >= :minPrice)
+          AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+          AND (:search IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')))
     """)
     Page<Product> findFiltered(
         @Param("categoryId") Long categoryId,

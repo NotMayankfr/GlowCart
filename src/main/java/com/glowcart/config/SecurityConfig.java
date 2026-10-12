@@ -80,7 +80,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/webhooks/**").permitAll()
                 // Documentation & Health
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/actuator/**").permitAll()
+                .requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/actuator/**").permitAll()
                 // All other operations require authenticated token
                 .anyRequest().authenticated()
             )
