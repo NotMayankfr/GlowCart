@@ -73,8 +73,8 @@ class OversellIntegrationTest {
                 .build());
 
         Brand brand = brandRepository.save(Brand.builder()
-                .name("Nykaa Exclusive")
-                .slug("nykaa-exclusive")
+                .name("GlowCart Atelier")
+                .slug("glowcart-atelier")
                 .build());
 
         // Initial inventory is strictly 10 units with @Version optimistic lock starting at 0
@@ -92,7 +92,7 @@ class OversellIntegrationTest {
         // Prepare 200 distinct users with carts holding 1 unit each
         for (int i = 0; i < CONCURRENT_BUYERS; i++) {
             User user = userRepository.save(User.builder()
-                    .email("buyer_" + i + "@nykaafans.com")
+                    .email("buyer_" + i + "@glowcartfans.com")
                     .fullName("Buyer " + i)
                     .password("secret123")
                     .role(Role.CUSTOMER)

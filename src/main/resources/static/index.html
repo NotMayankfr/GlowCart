@@ -3,296 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GlowCart — Luxury Beauty & Couture Cosmetics</title>
+    <title>GlowCart — Luxury Beauty, Cosmetics & Fragrance</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <span>✨ FESTIVE BEAUTY SALE: Enjoy free delivery on orders above ₹499 & complimentary samples</span>
-        <a href="/swagger-ui.html" target="_blank" class="top-link">Developer API Docs ↗</a>
+    <!-- Top Scroll Progress Bar -->
+    <div id="scrollProgressBar" class="scroll-progress-bar"></div>
+
+    <!-- Top Running Sale Marquee -->
+    <div class="top-marquee-strip">
+        <div class="marquee-track">
+            <span>FESTIVE GLOW SALE IS LIVE &bull; FREE EXPRESS DELIVERY ON ORDERS ABOVE ₹499 &bull; UP TO 50% OFF ON LUXE BEAUTY &bull; 100% AUTHENTIC BRANDS &bull; COMPLIMENTARY SAMPLES ON ALL CHECKOUTS &bull; EXTRA 10% OFF WITH CODE: GLOW10</span>
+            <span>FESTIVE GLOW SALE IS LIVE &bull; FREE EXPRESS DELIVERY ON ORDERS ABOVE ₹499 &bull; UP TO 50% OFF ON LUXE BEAUTY &bull; 100% AUTHENTIC BRANDS &bull; COMPLIMENTARY SAMPLES ON ALL CHECKOUTS &bull; EXTRA 10% OFF WITH CODE: GLOW10</span>
+        </div>
     </div>
 
-    <!-- Sticky Main Navigation -->
-    <header class="navbar">
-        <div class="nav-container">
+    <!-- Main Navigation Header -->
+    <header class="main-header" id="mainHeader">
+        <div class="header-inner">
             <a href="/" class="brand-logo">
-                <span class="logo-mark">✦</span>
-                <span class="logo-text">GlowCart</span>
+                <span class="logo-accent">GLOW</span><span class="logo-main">CART</span>
             </a>
 
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Search 500+ luxury serums, lipsticks, perfumes...">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search for products, brands, ingredients (e.g. Niacinamide, Ruby Woo, Dior)...">
+                <button class="search-clear-btn" id="searchClearBtn" style="display:none;">&times;</button>
             </div>
 
-            <div class="nav-actions">
-                <button class="btn-ai-consultant" id="openAiModalBtn">
-                    ✨ GlowAI™ Advisor
+            <!-- Action Buttons -->
+            <div class="header-actions">
+                <a href="/swagger-ui.html" target="_blank" class="nav-action-link" title="Open API Documentation">
+                    <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    <span>API Docs</span>
+                </a>
+
+                <button class="nav-action-btn ai-advisor-btn" id="aiAdvisorNavBtn" title="AI Skin & Routine Advisor">
+                    <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M12 3v4"></path>
+                        <path d="M12 17v4"></path>
+                        <path d="M3 12h4"></path>
+                        <path d="M17 12h4"></path>
+                    </svg>
+                    <span>AI Routine Matcher</span>
                 </button>
-                <button class="btn-demo-concurrency" id="openStressTestBtn">
-                    ⚡ Flash Drop Engine
+
+                <button class="nav-action-btn" id="stressTestNavBtn" title="Test High-Traffic Concurrency">
+                    <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>Stress Test</span>
                 </button>
-                <button class="nav-btn" id="authBtn">
-                    <span class="icon">👤</span>
-                    <span id="authBtnText">Sign In</span>
+
+                <button class="nav-action-btn" id="authBtn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span id="authBtnLabel">Sign In</span>
                 </button>
-                <button class="nav-btn cart-btn" id="cartToggleBtn">
-                    <span class="icon">🛍️</span>
+
+                <button class="bag-action-btn" id="bagToggleBtn">
+                    <div class="bag-icon-wrapper">
+                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg>
+                        <span class="bag-count-badge" id="bagBadge">0</span>
+                    </div>
                     <span>Bag</span>
-                    <span class="cart-badge" id="cartBadge">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- Category Strip attached to header -->
-        <nav class="category-strip">
-            <div class="category-container" id="categoryTabs">
-                <button class="cat-pill active" data-category="">All Products (24)</button>
-                <button class="cat-pill" data-category="skincare">Skincare</button>
-                <button class="cat-pill" data-category="makeup">Makeup</button>
-                <button class="cat-pill" data-category="haircare">Haircare</button>
-                <button class="cat-pill" data-category="fragrance">Fragrance</button>
-                <button class="cat-pill" data-category="bath">Bath & Body</button>
+        <!-- Secondary Department Navigation -->
+        <nav class="sub-navbar">
+            <div class="sub-nav-inner" id="categoryNav">
+                <button class="sub-nav-item active" data-category="">All Products</button>
+                <button class="sub-nav-item" data-category="skincare">Skincare</button>
+                <button class="sub-nav-item" data-category="makeup">Makeup</button>
+                <button class="sub-nav-item" data-category="haircare">Haircare</button>
+                <button class="sub-nav-item" data-category="fragrance">Fragrance</button>
+                <button class="sub-nav-item" data-category="bath">Bath & Body</button>
+                <button class="sub-nav-item" data-category="luxe">Luxe Edits</button>
             </div>
         </nav>
     </header>
 
-    <!-- Luxury Hero Banner -->
-    <section class="hero-banner">
-        <div class="hero-content">
-            <div class="hero-tag">COUTURE COSMETICS & DERMATOLOGY</div>
-            <h1>Curated Luxury Beauty, Delivered in Minutes</h1>
-            <p>Explore high-performance active skincare, editorial makeup, and artisanal fragrances backed by real-time inventory reservation.</p>
-            <div class="hero-cta-group">
-                <button class="btn-hero-primary" onclick="document.getElementById('catalogAnchor').scrollIntoView({behavior:'smooth'})">
-                    Shop Trending Drops ↓
-                </button>
-                <button class="btn-hero-secondary" id="heroAiBtn">
-                    ✨ Try GlowAI™ Shade Match
-                </button>
+    <!-- Bank Offer Discount Strip -->
+    <div class="bank-strip">
+        <div class="bank-strip-inner">
+            <span class="bank-tag">BANK OFFER</span>
+            <span>Get Flat 10% Instant Discount on HDFC & ICICI Cards on orders above ₹1,999 | Use Code: <strong>BANKGLOW</strong></span>
+        </div>
+    </div>
+
+    <!-- Festive Hero Carousel Banner -->
+    <section class="hero-carousel-section">
+        <div class="hero-slide" id="heroSlide">
+            <div class="hero-slide-content">
+                <span class="hero-eyebrow">CELEBRATION MODE: ON</span>
+                <h1>The Grand Festive Beauty Drop</h1>
+                <p>Curated skincare, couture lipsticks, and niche perfumes from 30+ luxury houses with instant stock reservation.</p>
+                <div class="hero-actions">
+                    <button class="btn-hero-shop" onclick="document.getElementById('catalogSection').scrollIntoView({behavior:'smooth'})">
+                        Explore 100+ Products &darr;
+                    </button>
+                    <button class="btn-hero-ai" id="heroAiAdvisorBtn">
+                        AI Skin Routine Matcher
+                    </button>
+                    <button class="btn-hero-deal" id="heroScrollFlashBtn">
+                        Flash Sale Drop (10 Units)
+                    </button>
+                </div>
+            </div>
+            <div class="hero-slide-decor">
+                <div class="hero-badge-card">
+                    <span class="badge-num">100+</span>
+                    <span class="badge-txt">Curated Beauty Items</span>
+                </div>
+                <div class="hero-badge-card">
+                    <span class="badge-num">&lt;50ms</span>
+                    <span class="badge-txt">Redis Cached Search</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- GlowAI™ Beauty Advisor Card -->
-    <section class="ai-banner-section" id="aiSection">
-        <div class="ai-banner-card">
-            <div class="ai-badge">✦ POWERED BY GLOWAI™</div>
-            <h2>Personalized Skin Diagnosis & Routine Builder</h2>
-            <p>Tell us your skin goals or makeup aesthetic. Our AI analyzes formulation synergies to recommend a clinically matched 3-step routine.</p>
-            
-            <div class="ai-controls">
-                <div class="ai-select-group">
-                    <label>Skin Type:</label>
-                    <select id="aiSkinType">
-                        <option value="oily">Oily / Blemish-Prone</option>
-                        <option value="dry">Dry / Dehydrated</option>
-                        <option value="combination">Combination Skin</option>
-                        <option value="sensitive">Sensitive & Reactive</option>
-                    </select>
-                </div>
-                <div class="ai-select-group">
-                    <label>Primary Goal:</label>
-                    <select id="aiGoal">
-                        <option value="glass-skin">Korean Glass Skin Radiance</option>
-                        <option value="acne-defense">Pore Defense & Texture Smoothing</option>
-                        <option value="anti-aging">Collagen Boosting & Firming</option>
-                        <option value="red-carpet">High-Glam Clean Girl Finish</option>
-                    </select>
-                </div>
-                <button class="btn-run-ai" id="generateAiRoutineBtn">
-                    🪄 Generate AI Regimen
-                </button>
+    <!-- Quick Steals 6-Card Category Grid -->
+    <section class="quick-steals-section reveal-on-scroll">
+        <div class="section-title-wrap">
+            <h2 class="section-title">Festive Steals & Categories</h2>
+            <span class="section-subtitle">Pick by your favorite beauty department</span>
+        </div>
+        <div class="steals-grid">
+            <div class="steal-card" data-cat-filter="makeup">
+                <div class="steal-tag">UP TO 40% OFF</div>
+                <h3>Couture Makeup</h3>
+                <p>Cashmere lipsticks, foundations & liquid blush</p>
+                <span class="steal-action">Shop Makeup &rarr;</span>
             </div>
-
-            <div class="ai-result-box" id="aiResultBox" style="display: none;">
-                <div class="ai-result-header">
-                    <span class="ai-regimen-title" id="aiRegimenTitle">Curated 3-Step Routine</span>
-                    <span class="ai-match-percent">99.4% Match</span>
-                </div>
-                <p id="aiRegimenExplanation" class="ai-explanation"></p>
-                <div class="ai-products-suggested" id="aiProductsSuggested"></div>
-                <button class="btn-add-ai-bundle" id="addAiBundleBtn">
-                    🛍️ Add Full AI Regimen to Bag (15% Bundle Savings)
-                </button>
+            <div class="steal-card" data-cat-filter="skincare">
+                <div class="steal-tag">UP TO 35% OFF</div>
+                <h3>Dermat Skincare</h3>
+                <p>Korean essences, serums, SPF50 & exfoliants</p>
+                <span class="steal-action">Shop Skincare &rarr;</span>
+            </div>
+            <div class="steal-card" data-cat-filter="haircare">
+                <div class="steal-tag">UP TO 40% OFF</div>
+                <h3>Hair Salon & Care</h3>
+                <p>Bonding oils, argan masks & scalp elixirs</p>
+                <span class="steal-action">Shop Hair &rarr;</span>
+            </div>
+            <div class="steal-card" data-cat-filter="fragrance">
+                <div class="steal-tag">UP TO 50% OFF</div>
+                <h3>Artisanal Fragrance</h3>
+                <p>Eau de Parfums, luxury mists & sensual ouds</p>
+                <span class="steal-action">Shop Scents &rarr;</span>
+            </div>
+            <div class="steal-card" data-cat-filter="luxe">
+                <div class="steal-tag">LUXE DROPS</div>
+                <h3>Couture Edits</h3>
+                <p>Tom Ford, Dior, Charlotte Tilbury & MFK</p>
+                <span class="steal-action">Shop Luxe &rarr;</span>
+            </div>
+            <div class="steal-card" data-cat-filter="bath">
+                <div class="steal-tag">UNDER ₹1499</div>
+                <h3>Bath & Body Care</h3>
+                <p>Brazilian firming creams, shower oils & butters</p>
+                <span class="steal-action">Shop Body &rarr;</span>
             </div>
         </div>
     </section>
 
-    <!-- Concurrency Live Engine Section -->
-    <section class="showcase-section" id="concurrencySection">
-        <div class="showcase-card">
-            <div class="showcase-header">
+    <!-- Interactive Concurrency Flash Sale Drop -->
+    <section class="concurrency-section reveal-on-scroll" id="stressSection">
+        <div class="concurrency-card">
+            <div class="concurrency-header">
                 <div>
-                    <span class="live-indicator">LIVE SYSTEM STORY</span>
-                    <h2>⚡ Flash Drop Engine — Concurrency & Oversell Protection</h2>
-                    <p>Demonstrates JPA Optimistic Locking (`@Version`): Simulate 20 concurrent shoppers competing for 10 units of the Flash Sale Serum simultaneously.</p>
+                    <span class="concurrency-pill">REAL-TIME INVENTORY ENGINE</span>
+                    <h2>Concurrency & Oversell Protection Showcase</h2>
+                    <p>Simulate 20 concurrent shoppers attempting to purchase 10 units of the Flash Sale Elixir at the exact same millisecond. Powered by JPA Optimistic Locking.</p>
                 </div>
-                <button class="btn-fire-test" id="runStressTestBtn">
-                    <span>🚀 Fire 20 Concurrent Buyers</span>
+                <button class="btn-fire-concurrency" id="runConcurrencyBtn">
+                    Fire 20 Concurrent Buyers
                 </button>
             </div>
-            
-            <div class="stress-results" id="stressResults" style="display: none;">
-                <div class="metric-card success-card">
-                    <div class="metric-num" id="metricSuccess">0</div>
-                    <div class="metric-label">Orders Placed (201 Created)</div>
+
+            <div class="concurrency-metrics" id="concurrencyMetrics" style="display: none;">
+                <div class="metric-box box-success">
+                    <span class="metric-val" id="metricSuccess">0</span>
+                    <span class="metric-lbl">Orders Placed (201 Created)</span>
                 </div>
-                <div class="metric-card conflict-card">
-                    <div class="metric-num" id="metricConflict">0</div>
-                    <div class="metric-label">Safe Conflicts Handled (409)</div>
+                <div class="metric-box box-conflict">
+                    <span class="metric-val" id="metricConflict">0</span>
+                    <span class="metric-lbl">Conflicts Caught (409 Safe)</span>
                 </div>
-                <div class="metric-card stock-card">
-                    <div class="metric-num" id="metricStock">-</div>
-                    <div class="metric-label">Final Stock (Strict 0)</div>
+                <div class="metric-box box-stock">
+                    <span class="metric-val" id="metricStock">0</span>
+                    <span class="metric-lbl">Final Stock (Strict 0)</span>
                 </div>
-                <div class="metric-card oversell-card">
-                    <div class="metric-num" id="metricOversell">0</div>
-                    <div class="metric-label">Oversold Units (Zero Error)</div>
+                <div class="metric-box box-zero">
+                    <span class="metric-val" id="metricOversell">0</span>
+                    <span class="metric-lbl">Negative Oversell</span>
                 </div>
             </div>
-            <div class="stress-log" id="stressLog" style="display: none;"></div>
+
+            <div class="concurrency-log" id="concurrencyLog" style="display: none;"></div>
         </div>
     </section>
 
-    <!-- Main Catalog Section -->
-    <main class="catalog-section" id="catalogAnchor">
-        <div class="section-header">
+    <!-- Horizontal Carousel: Trending Best Sellers -->
+    <section class="carousel-section reveal-on-scroll">
+        <div class="carousel-header">
             <div>
-                <h2>Trending Beauty Drops</h2>
-                <p>Authentic luxury products backed by real-time inventory management</p>
+                <h2 class="section-title">Trending Bestsellers</h2>
+                <span class="section-subtitle">Most loved by beauty enthusiasts this week</span>
             </div>
-            <div class="sort-wrapper">
-                <label for="sortSelect">Sort:</label>
-                <select id="sortSelect">
-                    <option value="featured">Featured First</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                </select>
+            <div class="carousel-nav-arrows">
+                <button class="carousel-arrow" id="carouselPrevBtn" aria-label="Previous">&larr;</button>
+                <button class="carousel-arrow" id="carouselNextBtn" aria-label="Next">&rarr;</button>
+            </div>
+        </div>
+        <div class="carousel-track" id="bestsellerCarousel">
+            <!-- Populated via JavaScript -->
+        </div>
+    </section>
+
+    <!-- Main Catalog Section (100+ Products) -->
+    <section class="catalog-section reveal-on-scroll" id="catalogSection">
+        <div class="catalog-header-bar">
+            <div>
+                <h2 class="section-title">All Products (<span id="totalProductCount">0</span>)</h2>
+                <span class="section-subtitle">Filter by category, price, brand or discount</span>
+            </div>
+
+            <div class="catalog-controls">
+                <div class="filter-pill-group">
+                    <button class="filter-btn active" data-price-filter="all">All Prices</button>
+                    <button class="filter-btn" data-price-filter="under-1000">Under ₹1,000</button>
+                    <button class="filter-btn" data-price-filter="1000-3000">₹1,000 - ₹3,000</button>
+                    <button class="filter-btn" data-price-filter="above-3000">Above ₹3,000</button>
+                </div>
+
+                <div class="sort-select-wrap">
+                    <label for="catalogSort">Sort By:</label>
+                    <select id="catalogSort">
+                        <option value="featured">Featured / Popular</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="discount">Biggest Discount</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <!-- Product Grid -->
-        <div class="product-grid" id="productGrid">
-            <div class="loading-spinner">Curating beauty catalog...</div>
+        <!-- 100+ Products Grid -->
+        <div class="catalog-grid" id="catalogGrid">
+            <div class="catalog-loading">Loading curated 100+ beauty catalog...</div>
         </div>
-    </main>
+    </section>
 
-    <!-- Slide-over Cart Drawer -->
-    <div class="cart-overlay" id="cartOverlay"></div>
-    <aside class="cart-drawer" id="cartDrawer">
-        <div class="cart-header">
-            <h3>Your Shopping Bag (<span id="cartCountHeader">0</span>)</h3>
-            <button class="btn-close" id="closeCartBtn">✕</button>
+    <!-- Slide-Over Shopping Bag Drawer -->
+    <div class="bag-backdrop" id="bagBackdrop"></div>
+    <aside class="bag-drawer" id="bagDrawer">
+        <div class="bag-header">
+            <div class="bag-title-wrap">
+                <h3>Shopping Bag</h3>
+                <span class="bag-items-badge" id="bagHeaderCount">0 Items</span>
+            </div>
+            <button class="bag-close-btn" id="closeBagBtn">&times;</button>
         </div>
-        <div class="cart-body" id="cartItemsList">
-            <div class="empty-cart-msg">Your shopping bag is empty. Explore our luxury drops!</div>
+
+        <div class="bag-body" id="bagItemsContainer">
+            <div class="empty-bag-view">
+                <svg viewBox="0 0 24 24" width="48" height="48" stroke="#d1c4cb" stroke-width="1.5" fill="none">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                </svg>
+                <p>Your shopping bag is currently empty.</p>
+                <button class="btn-continue-shopping" onclick="document.getElementById('bagBackdrop').click()">
+                    Start Shopping &rarr;
+                </button>
+            </div>
         </div>
-        <div class="cart-footer">
-            <div class="cart-summary-row">
-                <span>Subtotal</span>
-                <span id="cartSubtotal">₹0</span>
+
+        <div class="bag-footer" id="bagFooter">
+            <!-- Coupon Code Strip -->
+            <div class="coupon-box">
+                <input type="text" id="couponInput" placeholder="Enter coupon code (e.g. GLOW10)" uppercase>
+                <button id="applyCouponBtn">Apply</button>
             </div>
-            <div class="cart-summary-row">
-                <span>Standard Express Shipping</span>
-                <span class="free-text">FREE</span>
+            <div id="couponMessage" class="coupon-msg"></div>
+
+            <div class="price-breakdown">
+                <div class="price-row">
+                    <span>Bag Total (MRP)</span>
+                    <span id="bagMrpTotal">₹0</span>
+                </div>
+                <div class="price-row" id="bagDiscountRow" style="display: none;">
+                    <span class="discount-text">Coupon Savings</span>
+                    <span class="discount-text" id="bagCouponSavings">-₹0</span>
+                </div>
+                <div class="price-row">
+                    <span>Standard Express Shipping</span>
+                    <span class="free-text">FREE</span>
+                </div>
+                <div class="price-row total-row">
+                    <span>Grand Total</span>
+                    <span id="bagGrandTotal">₹0</span>
+                </div>
             </div>
-            <div class="cart-summary-row total-row">
-                <span>Total Amount</span>
-                <span id="cartTotal">₹0</span>
-            </div>
-            <button class="btn-checkout" id="checkoutBtn" disabled>
-                🔒 Place Order with Idempotency Key
+
+            <button class="btn-checkout-order" id="checkoutOrderBtn" disabled>
+                Proceed to Checkout with Idempotency Key
             </button>
-            <p class="checkout-hint">Protected against duplicate order creation & overselling.</p>
+            <p class="checkout-guarantee">Secured by JPA Optimistic Locking. Protected against double charges.</p>
         </div>
     </aside>
 
-    <!-- Authentication Modal -->
-    <div class="modal-overlay" id="authModal">
-        <div class="modal-card">
-            <button class="btn-modal-close" id="closeAuthModalBtn">✕</button>
-            <div class="auth-tabs">
-                <button class="auth-tab active" id="tabLogin">Sign In</button>
-                <button class="auth-tab" id="tabRegister">Create Account</button>
+    <!-- Sign In / Register Modal -->
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal-window">
+            <button class="modal-close-btn" id="closeAuthBtn">&times;</button>
+            <div class="modal-tabs">
+                <button class="modal-tab active" id="loginTab">Sign In</button>
+                <button class="modal-tab" id="registerTab">Create Account</button>
             </div>
 
             <!-- Login Form -->
-            <form id="loginForm" class="auth-form">
-                <div class="form-group">
+            <form id="loginForm" class="modal-form">
+                <div class="input-field">
                     <label>Email Address</label>
-                    <input type="email" id="loginEmail" placeholder="mayank@glowcart.com" required value="mayank@glowcart.com">
+                    <input type="email" id="loginEmail" value="mayank@glowcart.com" required>
                 </div>
-                <div class="form-group">
+                <div class="input-field">
                     <label>Password</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••" required value="password123">
+                    <input type="password" id="loginPassword" value="password123" required>
                 </div>
-                <button type="submit" class="btn-primary-auth">Sign In</button>
-                <button type="button" class="btn-quick-fill" id="fillDemoCustomer">⚡ Quick Fill Demo Customer</button>
+                <button type="submit" class="btn-modal-submit">Sign In to GlowCart</button>
+                <button type="button" class="btn-quick-fill" id="fillDemoCustomer">Quick Fill Demo Account</button>
             </form>
 
             <!-- Register Form -->
-            <form id="registerForm" class="auth-form" style="display: none;">
-                <div class="form-group">
+            <form id="registerForm" class="modal-form" style="display: none;">
+                <div class="input-field">
                     <label>Full Name</label>
                     <input type="text" id="regName" placeholder="Mayank Chauhan" required>
                 </div>
-                <div class="form-group">
+                <div class="input-field">
                     <label>Email Address</label>
                     <input type="email" id="regEmail" placeholder="mayank@example.com" required>
                 </div>
-                <div class="form-group">
-                    <label>Password (min 8 characters)</label>
+                <div class="input-field">
+                    <label>Password (min 8 chars)</label>
                     <input type="password" id="regPassword" placeholder="••••••••" minlength="8" required>
                 </div>
-                <button type="submit" class="btn-primary-auth">Create Account</button>
+                <button type="submit" class="btn-modal-submit">Create Account</button>
             </form>
-            <div id="authError" class="auth-error"></div>
+            <div id="authErrorMsg" class="modal-error"></div>
         </div>
     </div>
 
     <!-- Order Receipt Modal -->
-    <div class="modal-overlay" id="orderModal">
-        <div class="modal-card receipt-card">
-            <button class="btn-modal-close" id="closeOrderModalBtn">✕</button>
-            <div class="receipt-icon">🎉</div>
-            <h2>Order Placed Successfully!</h2>
-            <p class="receipt-sub">Processed with atomic JPA stock reservation</p>
+    <div class="modal-backdrop" id="receiptModal">
+        <div class="modal-window receipt-window">
+            <button class="modal-close-btn" id="closeReceiptBtn">&times;</button>
+            <div class="receipt-header-icon">&check;</div>
+            <h2>Order Placed Successfully</h2>
+            <p class="receipt-subhead">Inventory allocated and transaction confirmed.</p>
 
-            <div class="receipt-details" id="receiptDetails"></div>
+            <div class="receipt-card" id="receiptContent"></div>
 
-            <div class="receipt-actions">
-                <button class="btn-simulate-webhook" id="simulatePaymentBtn">
-                    💳 Simulate Mock Payment Webhook (PAID)
+            <div class="receipt-buttons">
+                <button class="btn-webhook-sim" id="simulateWebhookBtn">
+                    Simulate Gateway Webhook Callback (Set PAID)
                 </button>
-                <button class="btn-done" id="orderDoneBtn">Continue Shopping</button>
+                <button class="btn-receipt-dismiss" id="dismissReceiptBtn">
+                    Continue Shopping
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <!-- Production Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <div class="brand-logo">✦ GlowCart</div>
-                <p>High-performance beauty commerce engineered with sub-100ms Redis caching, optimistic locking, and idempotent checkout transactions.</p>
+    <!-- AI Beauty & Formulation Advisor Modal -->
+    <div class="ai-modal-backdrop" id="aiModalBackdrop"></div>
+    <div class="ai-advisor-modal" id="aiAdvisorModal">
+        <div class="ai-modal-header">
+            <div class="ai-modal-title-wrap">
+                <span class="ai-badge-pill">FORMULATION INTELLIGENCE</span>
+                <h3>AI Skin &amp; Routine Advisor</h3>
+                <p>Answer 3 quick preferences for an algorithmic 3-step beauty regimen tailored to your skin profile.</p>
             </div>
-            <div class="footer-links">
-                <a href="/swagger-ui.html" target="_blank">Swagger UI</a>
-                <a href="/v3/api-docs" target="_blank">OpenAPI 3.0</a>
-                <a href="https://github.com/NotMayankfr/GlowCart" target="_blank">GitHub Source</a>
+            <button class="ai-modal-close" id="aiModalCloseBtn">&times;</button>
+        </div>
+        <div class="ai-modal-body">
+            <div class="ai-step-group">
+                <label class="ai-step-label">1. Skin Type</label>
+                <div class="ai-options-grid" id="aiSkinTypeOptions">
+                    <button type="button" class="ai-opt-btn active" data-type="oily">Oily / Acne-Prone</button>
+                    <button type="button" class="ai-opt-btn" data-type="dry">Dry &amp; Dehydrated</button>
+                    <button type="button" class="ai-opt-btn" data-type="combination">Combination</button>
+                    <button type="button" class="ai-opt-btn" data-type="sensitive">Sensitive &amp; Barrier Fragile</button>
+                </div>
+            </div>
+
+            <div class="ai-step-group">
+                <label class="ai-step-label">2. Primary Concern</label>
+                <div class="ai-options-grid" id="aiConcernOptions">
+                    <button type="button" class="ai-opt-btn active" data-concern="pores">Pores &amp; Sebum Control</button>
+                    <button type="button" class="ai-opt-btn" data-concern="hydration">Glass Skin Hydration</button>
+                    <button type="button" class="ai-opt-btn" data-concern="pigmentation">Dark Spots &amp; Glow</button>
+                    <button type="button" class="ai-opt-btn" data-concern="aging">Anti-Aging &amp; Collagen</button>
+                    <button type="button" class="ai-opt-btn" data-concern="barrier">Barrier Defense &amp; Calming</button>
+                </div>
+            </div>
+
+            <div class="ai-step-group">
+                <label class="ai-step-label">3. Regimen Preference</label>
+                <div class="ai-options-grid" id="aiTierOptions">
+                    <button type="button" class="ai-opt-btn active" data-tier="clinical">Clinical &amp; K-Beauty</button>
+                    <button type="button" class="ai-opt-btn" data-tier="luxury">Haute Luxury &amp; Couture</button>
+                    <button type="button" class="ai-opt-btn" data-tier="value">Value Dermatological</button>
+                </div>
+            </div>
+
+            <button class="btn-generate-routine" id="btnGenerateRoutine">
+                Generate Algorithmic Regimen &rarr;
+            </button>
+
+            <div class="ai-results-container" id="aiResultsContainer" style="display: none;">
+                <div class="ai-results-header">
+                    <span class="ai-compatibility-tag" id="aiCompatibilityScore">98% Compatibility Match</span>
+                    <h4 class="ai-regimen-name" id="aiRegimenName">Targeted Pore Refining &amp; Hydration Protocol</h4>
+                </div>
+                <div class="ai-recommended-cards" id="aiRecommendedCards">
+                    <!-- Populated dynamically via JS -->
+                </div>
+                <div class="ai-routine-footer">
+                    <div class="ai-routine-total">
+                        <span class="ai-total-label">Complete 3-Step Regimen:</span>
+                        <span class="ai-total-price" id="aiRoutineTotalPrice">₹0</span>
+                    </div>
+                    <button class="btn-add-routine-bag" id="btnAddRoutineToBag">
+                        Add All 3 Items to Bag
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <span>© 2026 GlowCart Luxury Beauty. All rights reserved.</span>
-            <span class="made-by-badge">Made by <strong>Mayank Chauhan</strong></span>
+    </div>
+
+    <!-- Floating Back to Top Button -->
+    <button class="back-to-top" id="backToTopBtn" aria-label="Back to top" title="Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m18 15-6-6-6 6"/>
+        </svg>
+    </button>
+
+    <!-- Notification Toast -->
+    <div class="toast-bar" id="toastBar"></div>
+
+    <!-- Production Footer -->
+    <footer class="site-footer">
+        <div class="footer-upper">
+            <div class="footer-col brand-col">
+                <span class="footer-logo">GLOWCART</span>
+                <p>India's high-performance luxury beauty destination. Engineered for sub-100ms catalog discovery, optimistic-locking stock protection, and idempotent order transactions.</p>
+                <div class="footer-security-badges">
+                    <span>100% Genuine Products</span> &bull;
+                    <span>Free Shipping</span> &bull;
+                    <span>Instant Returns</span>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Shop Categories</h4>
+                <ul>
+                    <li><a href="#catalogSection" onclick="filterByCategory('skincare')">Skincare Serums & Sunscreens</a></li>
+                    <li><a href="#catalogSection" onclick="filterByCategory('makeup')">Couture Lipsticks & Foundations</a></li>
+                    <li><a href="#catalogSection" onclick="filterByCategory('haircare')">Salon Hair Treatments & Oils</a></li>
+                    <li><a href="#catalogSection" onclick="filterByCategory('fragrance')">Luxury Eau de Parfums</a></li>
+                    <li><a href="#catalogSection" onclick="filterByCategory('bath')">Body Butters & Shower Elixirs</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Engineering & API</h4>
+                <ul>
+                    <li><a href="/swagger-ui.html" target="_blank">Interactive Swagger Docs</a></li>
+                    <li><a href="/v3/api-docs" target="_blank">OpenAPI 3.0 Contract</a></li>
+                    <li><a href="https://github.com/NotMayankfr/GlowCart" target="_blank">GitHub Repository</a></li>
+                    <li><a href="#stressSection">Live Concurrency Test</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-lower">
+            <div class="footer-copyright">
+                &copy; 2026 GlowCart Luxury Commerce Pvt. Ltd. All rights reserved.
+            </div>
+            <div class="footer-signature">
+                Made by <strong>Mayank Chauhan</strong>
+            </div>
         </div>
     </footer>
 

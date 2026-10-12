@@ -7,7 +7,7 @@
 ![Redis](https://img.shields.io/badge/Redis-7-red.svg)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)
 
-> High-throughput, production-grade beauty e-commerce backend built to solve real-world architectural challenges modeled after Nykaa: high-concurrency flash sales, strict inventory reservation without overselling, idempotent checkout, and sub-100ms cached catalog responses.
+> High-throughput, production-grade luxury beauty e-commerce backend built to solve real-world architectural challenges: high-concurrency flash sales, strict inventory reservation without overselling, idempotent checkout, and sub-100ms cached catalog responses.
 
 ---
 

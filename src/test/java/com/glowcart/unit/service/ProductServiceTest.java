@@ -52,7 +52,7 @@ class ProductServiceTest {
     @BeforeEach
     void setUp() {
         testCategory = Category.builder().id(1L).name("Skincare").slug("skincare").build();
-        testBrand = Brand.builder().id(2L).name("Nykaa").slug("nykaa").build();
+        testBrand = Brand.builder().id(2L).name("GlowCart Luxe").slug("glowcart-luxe").build();
         testProduct = Product.builder()
                 .id(10L)
                 .name("Rose Serum")
@@ -77,7 +77,7 @@ class ProductServiceTest {
         assertThat(response).isNotNull();
         assertThat(response.getName()).isEqualTo("Rose Serum");
         assertThat(response.getCategoryName()).isEqualTo("Skincare");
-        assertThat(response.getBrandName()).isEqualTo("Nykaa");
+        assertThat(response.getBrandName()).isEqualTo("GlowCart Luxe");
     }
 
     @Test
