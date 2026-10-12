@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:glowcart_test;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  flyway:
+    enabled: false
+  cache:
+    type: simple
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+jwt:
+  secret: dGhpcy1pcy1hLXZlcnktc2VjdXJlLWFuZC1sb25nLWp3dC1zZWNyZXQta2V5LXRoYXQtaXMtYXQtbGVhc3QtNjQtYnl0ZXMtbG9uZy1mb3ItaHM1MTI=
+  expirationMs: 3600000

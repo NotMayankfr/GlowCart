@@ -42,10 +42,12 @@ public class Product {
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
+    @Builder.Default
     @Column(nullable = false)
     private Boolean active = true;
 
     @Version
+    @Builder.Default
     @Column(nullable = false)
     private Long version = 0L;
 
