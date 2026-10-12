@@ -220,9 +220,3 @@ All unit tests and the 200-buyer concurrency flash sale test execute in an isola
 
 ---
 
-## Zero-Cost Production Deployment ($0/month)
-This project is configured for serverless production deployment on 100% free tiers:
-* **Application:** [Render.com](https://render.com) (Docker Web Service)
-* **PostgreSQL:** [Neon.tech](https://neon.tech) (Serverless Postgres with Flyway automatic migrations)
-* **Redis:** [Upstash](https://upstash.com) (Serverless Redis with SSL)
-* **CI/CD:** GitHub Actions (Build, verification, and automated Docker container builds)
