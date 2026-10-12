@@ -36,4 +36,3 @@ build/
 .env
 .env*.local
 *.secret
-application-prod.yml
