@@ -150,12 +150,63 @@ function generateFullCatalog() {
     return rawCatalog.map(item => {
         const discountPct = Math.round(((item.mrp - item.price) / item.mrp) * 100);
         const img = BEAUTY_STOCK_PHOTOS[item.imgIdx % BEAUTY_STOCK_PHOTOS.length];
+        const details = getProductDetails(item);
         return {
             ...item,
             discount: `${discountPct}% Off`,
-            image: img
+            image: img,
+            ...details
         };
     });
+}
+
+function getProductDetails(item) {
+    const sku = `GC-${item.category.toUpperCase().slice(0, 3)}-${item.id.toString().padStart(4, '0')}`;
+    let desc, actives, skinType, usage, origin;
+
+    if (item.category === 'skincare') {
+        desc = `Formulated with high-potency clinical actives to penetrate deep cellular matrices, optimize dermal hydration, and restore the natural lipid barrier. Dermatologically tested for daily restorative rituals.`;
+        actives = item.name.includes('Niacinamide') ? 'Niacinamide 10%, Zinc PCA, Multi-Depth Hyaluronic Acid' :
+                  item.name.includes('Snail') ? 'Filtered Snail Secretion Filtrate 96%, Sodium Hyaluronate, Panthenol' :
+                  item.name.includes('Vitamin C') ? 'Pure L-Ascorbic Acid 10%, Centella Asiatica, Ferulic Acid' :
+                  item.name.includes('BHA') || item.name.includes('Salicylic') ? 'Salicylic Acid 2%, Green Tea Extract, Methylpropanediol' :
+                  'Centella Asiatica, Bio-Identical Ceramides, Multi-Weight Hyaluronic Acid';
+        skinType = 'All Skin Types (Safe for Sensitive & Acne-Prone Skin)';
+        usage = 'Apply 2-3 drops to face and neck after cleansing. Pat gently until fully absorbed. Follow with moisturizer or sunscreen.';
+        origin = 'K-Beauty / Clinical Dermatology Lab';
+    } else if (item.category === 'makeup') {
+        desc = `Couture complexion and lip essential crafted for long-lasting velvet coverage, weightless comfort, and luminous pigmentation that adapts seamlessly to your natural undertone.`;
+        actives = 'Hyaluronic Filling Spheres, Vitamin E Acetate, Micro-Milled Pigments, Jojoba Esters';
+        skinType = 'Normal, Combination, Dry & Oily Skin';
+        usage = 'Glide directly onto lips or blend across cheekbones with fingertips or a beauty sponge for a seamless, buildable finish.';
+        origin = 'Atelier Formulation — Paris / Milan';
+    } else if (item.category === 'haircare') {
+        desc = `Professional salon-grade hair restorative designed to seal cuticles, repair fractured disulfide bonds, and impart mirror-like gloss without greasy buildup.`;
+        actives = 'Bond-Building Bis-Aminopropyl Dimaleate, Pure Argan Oil, Camelina Sativa, Botanical Keratin';
+        skinType = 'Color-Treated, Damaged, Frizzy, or Heat-Styled Hair';
+        usage = 'Work 2-4 drops into damp or dry mid-lengths and ends before heat styling or as an overnight gloss treatment.';
+        origin = 'Salon Professional Complex — USA / Switzerland';
+    } else if (item.category === 'fragrance') {
+        desc = `Exquisite artisanal Eau de Parfum curated with ethically harvested botanical essences, sensual heart accords, and enduring woody dry-downs for all-day captivating sillage.`;
+        actives = 'Top: Sparkling Bergamot & Pear; Heart: Rose Damascena & Jasmine Sambac; Base: Warm Amber & Oud';
+        skinType = 'All skin types';
+        usage = 'Mist onto pulse points including wrists, inner elbows, and the base of the neck for an enduring olfactory aura.';
+        origin = 'Grasse, France — Master Perfumery';
+    } else if (item.category === 'luxe') {
+        desc = `An ultra-prestigious beauty formulation crafted in limited small batches. Infused with rare botanical elixirs, signal peptides, and 24K gold micro-particles for supreme regeneration.`;
+        actives = '24K Colloidal Gold, Chrono-Peptides, Bio-Fermented Marine Kelp, Retinol Complex';
+        skinType = 'Mature, Dehydrated, and High-Performance Skin';
+        usage = 'Warm a small measure between fingertips and press gently into clean skin morning and evening.';
+        origin = 'Haute Horlogerie & Cosmetic Atelier';
+    } else { // bath
+        desc = `Indulgent botanical body elixir infused with nourishing cold-pressed plant butters and antioxidant fruit extracts for 48-hour velvety skin softness.`;
+        actives = 'Cupuaçu Butter, Açaí Oil, Cold-Pressed Coconut Oil, Shea Nilotica';
+        skinType = 'Dry, Flaky & Normal Body Skin';
+        usage = 'Massage lavishly all over the body in circular motions, focusing on elbows, knees, and dry areas.';
+        origin = 'Botanical Apothecary Formulation';
+    }
+
+    return { sku, desc, actives, skinType, usage, origin };
 }
 
 // Global Store State
@@ -178,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAuthUI();
     bindUserInteractions();
     bindAiAdvisor();
+    bindProductModalEvents();
 });
 
 // Dynamic sticky header shadow on scroll
@@ -411,7 +463,7 @@ function renderProductCardHTML(product) {
     const badgeClass = product.badge === 'Luxe' || product.badge === 'Luxe Bestseller' ? 'badge-luxe' : (product.badge === 'Flash Drop' ? 'badge-sale' : '');
 
     return `
-        <div class="product-item-card">
+        <div class="product-item-card" onclick="openProductModal(${product.id})">
             ${product.badge ? `<span class="card-badge ${badgeClass}">${escapeHtml(product.badge)}</span>` : ''}
             
             <div class="product-thumb-wrap">
@@ -420,6 +472,7 @@ function renderProductCardHTML(product) {
                      class="product-img" 
                      loading="lazy" 
                      onerror="this.onerror=null; this.src='${BEAUTY_STOCK_PHOTOS[0]}'">
+                <span class="quick-view-badge">Quick View</span>
             </div>
 
             <div class="product-details">
@@ -439,7 +492,7 @@ function renderProductCardHTML(product) {
                 </div>
 
                 <button class="btn-add-bag" 
-                        onclick="addToBag(${product.id})" 
+                        onclick="event.stopPropagation(); addToBag(${product.id})" 
                         ${isOutOfStock ? 'disabled' : ''}>
                     ${isOutOfStock ? 'Sold Out' : 'Add to Bag'}
                 </button>
@@ -449,17 +502,17 @@ function renderProductCardHTML(product) {
 }
 
 // Shopping Bag Management
-function addToBag(productId) {
+function addToBag(productId, qtyToAdd = 1) {
     const product = ALL_PRODUCTS.find(p => p.id === productId);
     if (!product || product.stock <= 0) return;
 
     const existing = cart.find(i => i.id === productId);
     if (existing) {
-        if (existing.qty < product.stock) {
-            existing.qty += 1;
+        if (existing.qty + qtyToAdd <= product.stock) {
+            existing.qty += qtyToAdd;
         } else {
+            existing.qty = product.stock;
             showToast(`Maximum stock limit reached for this item (${product.stock} units)`);
-            return;
         }
     } else {
         cart.push({
@@ -468,14 +521,14 @@ function addToBag(productId) {
             brand: product.brand,
             price: product.price,
             mrp: product.mrp,
-            qty: 1,
+            qty: Math.min(qtyToAdd, product.stock),
             image: product.image
         });
     }
 
     saveBag();
     updateBagUI();
-    showToast(`Added ${product.brand} - ${product.name.substring(0, 25)}... to bag`);
+    showToast(`Added ${qtyToAdd > 1 ? qtyToAdd + 'x ' : ''}${product.name.substring(0, 24)}... to bag`);
 }
 
 function updateBagQty(productId, delta) {
@@ -1151,4 +1204,167 @@ function generateAiRoutine() {
     resultsContainer.style.display = 'block';
     resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+
+// ----------------------------------------------------
+// Product Quick View & Detail Modal Controller
+// ----------------------------------------------------
+let currentModalProduct = null;
+let currentModalQty = 1;
+
+function openProductModal(productId) {
+    const product = ALL_PRODUCTS.find(p => p.id === productId);
+    if (!product) return;
+
+    currentModalProduct = product;
+    currentModalQty = 1;
+
+    const modal = document.getElementById('productDetailModal');
+    const backdrop = document.getElementById('productModalBackdrop');
+    if (!modal || !backdrop) return;
+
+    // Elements
+    const imgEl = document.getElementById('modalProductImg');
+    const badgeEl = document.getElementById('modalProductBadge');
+    const breadcrumbEl = document.getElementById('modalBreadcrumb');
+    const brandEl = document.getElementById('modalProductBrand');
+    const titleEl = document.getElementById('modalProductName');
+    const ratingEl = document.getElementById('modalProductRating');
+    const reviewsEl = document.getElementById('modalProductReviews');
+    const priceEl = document.getElementById('modalProductPrice');
+    const mrpEl = document.getElementById('modalProductMrp');
+    const discountEl = document.getElementById('modalProductDiscount');
+    const stockDot = document.getElementById('modalStockDot');
+    const stockText = document.getElementById('modalStockText');
+    const descEl = document.getElementById('modalProductDesc');
+    const attrSkinEl = document.getElementById('modalAttrSkin');
+    const attrActivesEl = document.getElementById('modalAttrActives');
+    const attrOriginEl = document.getElementById('modalAttrOrigin');
+    const attrSkuEl = document.getElementById('modalAttrSku');
+    const usageEl = document.getElementById('modalProductUsage');
+    const qtyDisplay = document.getElementById('modalQtyDisplay');
+    const addBtn = document.getElementById('modalAddToBagBtn');
+
+    if (imgEl) {
+        imgEl.src = product.image;
+        imgEl.alt = product.name;
+        imgEl.onerror = () => { imgEl.src = BEAUTY_STOCK_PHOTOS[0]; };
+    }
+
+    if (badgeEl) {
+        if (product.badge) {
+            badgeEl.textContent = product.badge;
+            badgeEl.style.display = 'inline-block';
+        } else {
+            badgeEl.style.display = 'none';
+        }
+    }
+
+    if (breadcrumbEl) breadcrumbEl.textContent = `Home > ${product.category.toUpperCase()} > ${product.brand}`;
+    if (brandEl) brandEl.textContent = product.brand;
+    if (titleEl) titleEl.textContent = product.name;
+    if (ratingEl) ratingEl.textContent = product.rating;
+    if (reviewsEl) reviewsEl.textContent = `(${product.reviews.toLocaleString()} verified customer reviews)`;
+
+    if (priceEl) priceEl.innerHTML = `&#8377;${product.price.toLocaleString('en-IN')}`;
+    if (mrpEl) mrpEl.innerHTML = `&#8377;${product.mrp.toLocaleString('en-IN')}`;
+    if (discountEl) discountEl.textContent = product.discount;
+
+    if (stockDot && stockText && addBtn) {
+        if (product.stock <= 0) {
+            stockDot.className = 'stock-indicator low-stock';
+            stockText.textContent = 'Out of Stock';
+            stockText.style.color = '#ef4444';
+            addBtn.disabled = true;
+            addBtn.textContent = 'Currently Sold Out';
+        } else if (product.stock <= 10) {
+            stockDot.className = 'stock-indicator low-stock';
+            stockText.textContent = `Limited Drop — Only ${product.stock} units remaining in stock!`;
+            stockText.style.color = '#b45309';
+            addBtn.disabled = false;
+        } else {
+            stockDot.className = 'stock-indicator in-stock';
+            stockText.textContent = `In Stock — ${product.stock} units ready for immediate express dispatch`;
+            stockText.style.color = '#047857';
+            addBtn.disabled = false;
+        }
+    }
+
+    if (descEl) descEl.textContent = product.desc;
+    if (attrSkinEl) attrSkinEl.textContent = product.skinType;
+    if (attrActivesEl) attrActivesEl.textContent = product.actives;
+    if (attrOriginEl) attrOriginEl.textContent = product.origin;
+    if (attrSkuEl) attrSkuEl.textContent = product.sku;
+    if (usageEl) usageEl.textContent = product.usage;
+
+    if (qtyDisplay) qtyDisplay.textContent = '1';
+    updateModalPrice();
+
+    modal.classList.add('open');
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function updateModalPrice() {
+    if (!currentModalProduct) return;
+    const addTotal = document.getElementById('modalAddTotal');
+    const total = currentModalProduct.price * currentModalQty;
+    if (addTotal) {
+        addTotal.innerHTML = `&#8377;${total.toLocaleString('en-IN')}`;
+    }
+}
+
+function closeProductModal() {
+    const modal = document.getElementById('productDetailModal');
+    const backdrop = document.getElementById('productModalBackdrop');
+    if (modal) modal.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function bindProductModalEvents() {
+    const closeBtn = document.getElementById('productModalCloseBtn');
+    const backdrop = document.getElementById('productModalBackdrop');
+    const minusBtn = document.getElementById('modalQtyMinus');
+    const plusBtn = document.getElementById('modalQtyPlus');
+    const addBtn = document.getElementById('modalAddToBagBtn');
+    const qtyDisplay = document.getElementById('modalQtyDisplay');
+
+    if (closeBtn) closeBtn.addEventListener('click', closeProductModal);
+    if (backdrop) backdrop.addEventListener('click', closeProductModal);
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeProductModal();
+    });
+
+    if (minusBtn) {
+        minusBtn.addEventListener('click', () => {
+            if (currentModalQty > 1) {
+                currentModalQty--;
+                if (qtyDisplay) qtyDisplay.textContent = currentModalQty;
+                updateModalPrice();
+            }
+        });
+    }
+
+    if (plusBtn) {
+        plusBtn.addEventListener('click', () => {
+            if (currentModalProduct && currentModalQty < currentModalProduct.stock) {
+                currentModalQty++;
+                if (qtyDisplay) qtyDisplay.textContent = currentModalQty;
+                updateModalPrice();
+            } else if (currentModalProduct) {
+                showToast(`Maximum available quantity is ${currentModalProduct.stock}`);
+            }
+        });
+    }
+
+    if (addBtn) {
+        addBtn.addEventListener('click', () => {
+            if (!currentModalProduct || currentModalProduct.stock <= 0) return;
+            addToBag(currentModalProduct.id, currentModalQty);
+            closeProductModal();
+        });
+    }
+}
+
 

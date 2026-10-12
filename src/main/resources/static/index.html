@@ -399,6 +399,107 @@
         </div>
     </div>
 
+    <!-- Product Detail & Quick View Modal -->
+    <div class="product-modal-backdrop" id="productModalBackdrop"></div>
+    <div class="product-detail-modal" id="productDetailModal">
+        <button class="product-modal-close" id="productModalCloseBtn" aria-label="Close product details">&times;</button>
+        <div class="product-modal-content">
+            <!-- Left Column: Image & Trust Badges -->
+            <div class="product-modal-left">
+                <div class="modal-image-wrap">
+                    <img id="modalProductImg" src="" alt="Product Image" class="modal-product-img">
+                    <span id="modalProductBadge" class="modal-badge-tag"></span>
+                </div>
+                <div class="modal-trust-strip">
+                    <div class="trust-item">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <span>100% Authentic Luxury</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        <span>Free Express Delivery</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                        <span>7-Day Return Guarantee</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Information, Pricing & Action -->
+            <div class="product-modal-right">
+                <div class="modal-breadcrumb" id="modalBreadcrumb">Home &gt; Beauty &gt; GlowCart</div>
+                <div class="modal-brand-name" id="modalProductBrand">BRAND</div>
+                <h2 class="modal-product-title" id="modalProductName">Product Name</h2>
+                
+                <div class="modal-rating-row">
+                    <div class="modal-stars">
+                        <span class="star-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                        <strong id="modalProductRating">4.9</strong>
+                    </div>
+                    <span class="modal-reviews-count" id="modalProductReviews">(0 reviews)</span>
+                    <span class="verified-buyer-pill">Verified Authentic</span>
+                </div>
+
+                <div class="modal-pricing-box">
+                    <div class="modal-price-row">
+                        <span class="modal-selling-price" id="modalProductPrice">&#8377;0</span>
+                        <span class="modal-mrp-strike" id="modalProductMrp">&#8377;0</span>
+                        <span class="modal-discount-pill" id="modalProductDiscount">0% OFF</span>
+                    </div>
+                    <span class="tax-inclusive-tag">Inclusive of all taxes &bull; COD Available &bull; Cash on Delivery</span>
+                </div>
+
+                <div class="modal-stock-status" id="modalStockStatus">
+                    <span class="stock-indicator in-stock" id="modalStockDot"></span>
+                    <span id="modalStockText">In Stock</span>
+                </div>
+
+                <div class="modal-desc-wrap">
+                    <p class="modal-desc-text" id="modalProductDesc">Loading product formulation details...</p>
+                </div>
+
+                <!-- Product Attributes Grid -->
+                <div class="modal-attributes-grid">
+                    <div class="attribute-card">
+                        <span class="attr-lbl">Skin / Hair Suitability</span>
+                        <span class="attr-val" id="modalAttrSkin">All Skin Types</span>
+                    </div>
+                    <div class="attribute-card">
+                        <span class="attr-lbl">Key Actives</span>
+                        <span class="attr-val" id="modalAttrActives">Active Complex</span>
+                    </div>
+                    <div class="attribute-card">
+                        <span class="attr-lbl">Formulation Origin</span>
+                        <span class="attr-val" id="modalAttrOrigin">Luxury Formulated</span>
+                    </div>
+                    <div class="attribute-card">
+                        <span class="attr-lbl">SKU Code</span>
+                        <span class="attr-val" id="modalAttrSku">GLOW-0001</span>
+                    </div>
+                </div>
+
+                <!-- How to Use Box -->
+                <div class="modal-usage-box">
+                    <strong>Recommended Application:</strong>
+                    <span id="modalProductUsage">Dispense 2-3 drops onto clean skin and gently massage in circular motions until absorbed.</span>
+                </div>
+
+                <!-- Action Controls: Quantity + Add to Bag -->
+                <div class="modal-action-row">
+                    <div class="qty-selector">
+                        <button type="button" class="qty-btn" id="modalQtyMinus">&minus;</button>
+                        <span class="qty-display" id="modalQtyDisplay">1</span>
+                        <button type="button" class="qty-btn" id="modalQtyPlus">&plus;</button>
+                    </div>
+                    <button class="btn-modal-add-bag" id="modalAddToBagBtn">
+                        Add to Bag &bull; <span id="modalAddTotal">&#8377;0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- AI Beauty & Formulation Advisor Modal -->
     <div class="ai-modal-backdrop" id="aiModalBackdrop"></div>
     <div class="ai-advisor-modal" id="aiAdvisorModal">
