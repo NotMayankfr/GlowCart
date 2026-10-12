@@ -687,7 +687,7 @@ async function handleCheckout() {
 
     const checkoutBtn = document.getElementById('checkoutOrderBtn');
     checkoutBtn.disabled = true;
-    checkoutBtn.textContent = "Reserving Inventory & Securing Order...";
+    checkoutBtn.textContent = "Simulating Inventory Reservation...";
 
     try {
         // Sync items with backend
@@ -751,7 +751,7 @@ async function handleCheckout() {
         displayReceipt(fallbackOrder);
     } finally {
         checkoutBtn.disabled = false;
-        checkoutBtn.textContent = "Proceed to Secure Checkout";
+        checkoutBtn.textContent = "Simulate Instant Checkout";
     }
 }
 
@@ -759,7 +759,7 @@ function displayReceipt(order) {
     const content = document.getElementById('receiptContent');
     const orderTotal = parseFloat(order.totalAmount) || 0;
     content.innerHTML = `
-        <p><strong>Order Tracking:</strong> #GC-${order.id}</p>
+        <p><strong>Order Tracking:</strong> #GC-${order.id} <span style="font-size:0.75rem; color:#db2777; font-weight:700;">(Simulated Demo)</span></p>
         <p><strong>Status:</strong> <span style="color:#d97706; font-weight:800;">${order.status}</span></p>
         <p><strong>Amount Paid:</strong> &#8377;${orderTotal.toLocaleString('en-IN')}</p>
         <p style="font-family:monospace; font-size:0.74rem; word-break:break-all; margin-top:8px;">

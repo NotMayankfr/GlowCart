@@ -112,6 +112,23 @@ body {
     color: var(--secondary);
 }
 
+.project-pill-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    background: #fdf2f8;
+    color: #db2777;
+    border: 1px solid #fbcfe8;
+    border-radius: 999px;
+    padding: 3px 8px;
+    margin-left: 10px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
 .search-container {
     flex: 1;
     max-width: 520px;
