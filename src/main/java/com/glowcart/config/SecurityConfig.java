@@ -79,8 +79,8 @@ public class SecurityConfig {
                 // Public auth & webhooks
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/webhooks/**").permitAll()
-                // Documentation & Health
-                .requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/actuator/**").permitAll()
+                // Documentation, Health & Static Frontend
+                .requestMatchers("/", "/index.html", "/style.css", "/app.js", "/*.css", "/*.js", "/favicon.ico", "/images/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/actuator/**").permitAll()
                 // All other operations require authenticated token
                 .anyRequest().authenticated()
             )

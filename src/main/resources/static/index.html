@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlowCart — Luxury Beauty & Flash Sale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Announcement Bar -->
+    <div class="top-bar">
+        <span>✨ PINK FRIDAY FLASH SALE: Live inventory drops & oversell-protected checkout!</span>
+        <a href="/swagger-ui.html" target="_blank" class="top-link">Open Swagger API Docs ↗</a>
+    </div>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <span class="logo-mark">✦</span>
+                <span class="logo-text">GlowCart</span>
+            </a>
+
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search serums, lipsticks, brands...">
+            </div>
+
+            <div class="nav-actions">
+                <button class="btn-demo-concurrency" id="openStressTestBtn">
+                    ⚡ Concurrency Test
+                </button>
+                <button class="nav-btn" id="authBtn">
+                    <span class="icon">👤</span>
+                    <span id="authBtnText">Sign In</span>
+                </button>
+                <button class="nav-btn cart-btn" id="cartToggleBtn">
+                    <span class="icon">🛍️</span>
+                    <span>Cart</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Nav Strip -->
+    <nav class="category-strip">
+        <div class="category-container" id="categoryTabs">
+            <button class="cat-pill active" data-category="">All Categories</button>
+            <button class="cat-pill" data-category="skincare">Skincare</button>
+            <button class="cat-pill" data-category="makeup">Makeup</button>
+            <button class="cat-pill" data-category="haircare">Haircare</button>
+            <button class="cat-pill" data-category="fragrance">Fragrance</button>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+        <div class="hero-content">
+            <div class="hero-tag">HIGH-CONCURRENCY BEAUTY PLATFORM</div>
+            <h1>The Nykaa-Scale Beauty Architecture</h1>
+            <p>Stateless JWT Auth • Redis-Cached Catalog • JPA Optimistic Locking Oversell Protection • Idempotent Checkout</p>
+            <div class="hero-badges">
+                <span class="badge-pill">Spring Boot 3.2</span>
+                <span class="badge-pill">PostgreSQL + Neon</span>
+                <span class="badge-pill">Upstash Redis</span>
+                <span class="badge-pill">Zero Oversell Guaranteed</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Concurrency Interactive Showcase -->
+    <section class="showcase-section" id="concurrencySection">
+        <div class="showcase-card">
+            <div class="showcase-header">
+                <div>
+                    <span class="live-indicator">LIVE SYSTEM STORY</span>
+                    <h2>⚡ Concurrency & Oversell Protection In Action</h2>
+                    <p>Simulate 20 concurrent shoppers attempting to buy the limited 10-unit flash serum simultaneously.</p>
+                </div>
+                <button class="btn-fire-test" id="runStressTestBtn">
+                    <span>🚀 Fire 20 Concurrent Buyers</span>
+                </button>
+            </div>
+            
+            <div class="stress-results" id="stressResults" style="display: none;">
+                <div class="metric-card success-card">
+                    <div class="metric-num" id="metricSuccess">0</div>
+                    <div class="metric-label">Orders Placed (201 Created)</div>
+                </div>
+                <div class="metric-card conflict-card">
+                    <div class="metric-num" id="metricConflict">0</div>
+                    <div class="metric-label">Conflicts Handled (409 Safe)</div>
+                </div>
+                <div class="metric-card stock-card">
+                    <div class="metric-num" id="metricStock">-</div>
+                    <div class="metric-label">Remaining Stock (Strict 0)</div>
+                </div>
+                <div class="metric-card oversell-card">
+                    <div class="metric-num" id="metricOversell">0</div>
+                    <div class="metric-label">Negative Oversell</div>
+                </div>
+            </div>
+            <div class="stress-log" id="stressLog" style="display: none;"></div>
+        </div>
+    </section>
+
+    <!-- Main Catalog Section -->
+    <main class="catalog-section">
+        <div class="section-header">
+            <div>
+                <h2>Trending Beauty Drops</h2>
+                <p>Authentic luxury products backed by real-time inventory management</p>
+            </div>
+            <div class="sort-wrapper">
+                <label for="sortSelect">Sort:</label>
+                <select id="sortSelect">
+                    <option value="createdAt">Newest First</option>
+                    <option value="price">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid" id="productGrid">
+            <div class="loading-spinner">Loading catalog...</div>
+        </div>
+    </main>
+
+    <!-- Slide-over Cart Drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>Your Shopping Bag (<span id="cartCountHeader">0</span>)</h3>
+            <button class="btn-close" id="closeCartBtn">✕</button>
+        </div>
+        <div class="cart-body" id="cartItemsList">
+            <div class="empty-cart-msg">Your shopping bag is empty. Explore our catalog!</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-summary-row">
+                <span>Subtotal</span>
+                <span id="cartSubtotal">$0.00</span>
+            </div>
+            <div class="cart-summary-row">
+                <span>Estimated Shipping</span>
+                <span class="free-text">FREE</span>
+            </div>
+            <div class="cart-summary-row total-row">
+                <span>Total Amount</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="btn-checkout" id="checkoutBtn" disabled>
+                🔒 Place Order with Idempotency Key
+            </button>
+            <p class="checkout-hint">Protected against duplicate order creation & overselling.</p>
+        </div>
+    </aside>
+
+    <!-- Authentication Modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-card">
+            <button class="btn-modal-close" id="closeAuthModalBtn">✕</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tabLogin">Sign In</button>
+                <button class="auth-tab" id="tabRegister">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="test@glowcart.com" required value="test@glowcart.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required value="password123">
+                </div>
+                <button type="submit" class="btn-primary-auth">Sign In</button>
+                <button type="button" class="btn-quick-fill" id="fillDemoCustomer">⚡ Quick Fill Demo Customer</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="regName" placeholder="Priya Sharma" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="regEmail" placeholder="priya@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password (min 8 characters)</label>
+                    <input type="password" id="regPassword" placeholder="••••••••" minlength="8" required>
+                </div>
+                <button type="submit" class="btn-primary-auth">Create Account</button>
+            </form>
+            <div id="authError" class="auth-error"></div>
+        </div>
+    </div>
+
+    <!-- Order Receipt Modal -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-card receipt-card">
+            <button class="btn-modal-close" id="closeOrderModalBtn">✕</button>
+            <div class="receipt-icon">🎉</div>
+            <h2>Order Confirmed!</h2>
+            <p class="receipt-sub">Processed with atomic stock reservation</p>
+
+            <div class="receipt-details" id="receiptDetails"></div>
+
+            <div class="receipt-actions">
+                <button class="btn-simulate-webhook" id="simulatePaymentBtn">
+                    💳 Simulate Mock Payment Webhook (PAID)
+                </button>
+                <button class="btn-done" id="orderDoneBtn">Back to Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="brand-logo">✦ GlowCart</div>
+                <p>Engineered for high-volume beauty commerce. Modeled after real architectural scaling challenges.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/swagger-ui.html" target="_blank">Swagger Documentation</a>
+                <a href="/v3/api-docs" target="_blank">OpenAPI JSON</a>
+                <a href="https://github.com/NotMayankfr/GlowCart" target="_blank">GitHub Repository</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
