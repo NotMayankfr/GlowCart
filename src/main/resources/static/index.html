@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GlowCart — Luxury Beauty & Flash Sale</title>
+    <title>GlowCart — Luxury Beauty & Couture Cosmetics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Top Announcement Bar -->
+    <!-- Top Bar -->
     <div class="top-bar">
-        <span>✨ PINK FRIDAY FLASH SALE: Live inventory drops & oversell-protected checkout!</span>
-        <a href="/swagger-ui.html" target="_blank" class="top-link">Open Swagger API Docs ↗</a>
+        <span>✨ FESTIVE BEAUTY SALE: Enjoy free delivery on orders above ₹499 & complimentary samples</span>
+        <a href="/swagger-ui.html" target="_blank" class="top-link">Developer API Docs ↗</a>
     </div>
 
-    <!-- Navigation -->
+    <!-- Sticky Main Navigation -->
     <header class="navbar">
         <div class="nav-container">
             <a href="/" class="brand-logo">
@@ -26,12 +26,15 @@
 
             <div class="search-box">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Search serums, lipsticks, brands...">
+                <input type="text" id="searchInput" placeholder="Search 500+ luxury serums, lipsticks, perfumes...">
             </div>
 
             <div class="nav-actions">
+                <button class="btn-ai-consultant" id="openAiModalBtn">
+                    ✨ GlowAI™ Advisor
+                </button>
                 <button class="btn-demo-concurrency" id="openStressTestBtn">
-                    ⚡ Concurrency Test
+                    ⚡ Flash Drop Engine
                 </button>
                 <button class="nav-btn" id="authBtn">
                     <span class="icon">👤</span>
@@ -39,47 +42,95 @@
                 </button>
                 <button class="nav-btn cart-btn" id="cartToggleBtn">
                     <span class="icon">🛍️</span>
-                    <span>Cart</span>
+                    <span>Bag</span>
                     <span class="cart-badge" id="cartBadge">0</span>
                 </button>
             </div>
         </div>
+
+        <!-- Category Strip attached to header -->
+        <nav class="category-strip">
+            <div class="category-container" id="categoryTabs">
+                <button class="cat-pill active" data-category="">All Products (24)</button>
+                <button class="cat-pill" data-category="skincare">Skincare</button>
+                <button class="cat-pill" data-category="makeup">Makeup</button>
+                <button class="cat-pill" data-category="haircare">Haircare</button>
+                <button class="cat-pill" data-category="fragrance">Fragrance</button>
+                <button class="cat-pill" data-category="bath">Bath & Body</button>
+            </div>
+        </nav>
     </header>
 
-    <!-- Category Nav Strip -->
-    <nav class="category-strip">
-        <div class="category-container" id="categoryTabs">
-            <button class="cat-pill active" data-category="">All Categories</button>
-            <button class="cat-pill" data-category="skincare">Skincare</button>
-            <button class="cat-pill" data-category="makeup">Makeup</button>
-            <button class="cat-pill" data-category="haircare">Haircare</button>
-            <button class="cat-pill" data-category="fragrance">Fragrance</button>
-        </div>
-    </nav>
-
-    <!-- Hero Banner -->
+    <!-- Luxury Hero Banner -->
     <section class="hero-banner">
         <div class="hero-content">
-            <div class="hero-tag">HIGH-CONCURRENCY BEAUTY PLATFORM</div>
-            <h1>The Nykaa-Scale Beauty Architecture</h1>
-            <p>Stateless JWT Auth • Redis-Cached Catalog • JPA Optimistic Locking Oversell Protection • Idempotent Checkout</p>
-            <div class="hero-badges">
-                <span class="badge-pill">Spring Boot 3.2</span>
-                <span class="badge-pill">PostgreSQL + Neon</span>
-                <span class="badge-pill">Upstash Redis</span>
-                <span class="badge-pill">Zero Oversell Guaranteed</span>
+            <div class="hero-tag">COUTURE COSMETICS & DERMATOLOGY</div>
+            <h1>Curated Luxury Beauty, Delivered in Minutes</h1>
+            <p>Explore high-performance active skincare, editorial makeup, and artisanal fragrances backed by real-time inventory reservation.</p>
+            <div class="hero-cta-group">
+                <button class="btn-hero-primary" onclick="document.getElementById('catalogAnchor').scrollIntoView({behavior:'smooth'})">
+                    Shop Trending Drops ↓
+                </button>
+                <button class="btn-hero-secondary" id="heroAiBtn">
+                    ✨ Try GlowAI™ Shade Match
+                </button>
             </div>
         </div>
     </section>
 
-    <!-- Concurrency Interactive Showcase -->
+    <!-- GlowAI™ Beauty Advisor Card -->
+    <section class="ai-banner-section" id="aiSection">
+        <div class="ai-banner-card">
+            <div class="ai-badge">✦ POWERED BY GLOWAI™</div>
+            <h2>Personalized Skin Diagnosis & Routine Builder</h2>
+            <p>Tell us your skin goals or makeup aesthetic. Our AI analyzes formulation synergies to recommend a clinically matched 3-step routine.</p>
+            
+            <div class="ai-controls">
+                <div class="ai-select-group">
+                    <label>Skin Type:</label>
+                    <select id="aiSkinType">
+                        <option value="oily">Oily / Blemish-Prone</option>
+                        <option value="dry">Dry / Dehydrated</option>
+                        <option value="combination">Combination Skin</option>
+                        <option value="sensitive">Sensitive & Reactive</option>
+                    </select>
+                </div>
+                <div class="ai-select-group">
+                    <label>Primary Goal:</label>
+                    <select id="aiGoal">
+                        <option value="glass-skin">Korean Glass Skin Radiance</option>
+                        <option value="acne-defense">Pore Defense & Texture Smoothing</option>
+                        <option value="anti-aging">Collagen Boosting & Firming</option>
+                        <option value="red-carpet">High-Glam Clean Girl Finish</option>
+                    </select>
+                </div>
+                <button class="btn-run-ai" id="generateAiRoutineBtn">
+                    🪄 Generate AI Regimen
+                </button>
+            </div>
+
+            <div class="ai-result-box" id="aiResultBox" style="display: none;">
+                <div class="ai-result-header">
+                    <span class="ai-regimen-title" id="aiRegimenTitle">Curated 3-Step Routine</span>
+                    <span class="ai-match-percent">99.4% Match</span>
+                </div>
+                <p id="aiRegimenExplanation" class="ai-explanation"></p>
+                <div class="ai-products-suggested" id="aiProductsSuggested"></div>
+                <button class="btn-add-ai-bundle" id="addAiBundleBtn">
+                    🛍️ Add Full AI Regimen to Bag (15% Bundle Savings)
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Concurrency Live Engine Section -->
     <section class="showcase-section" id="concurrencySection">
         <div class="showcase-card">
             <div class="showcase-header">
                 <div>
                     <span class="live-indicator">LIVE SYSTEM STORY</span>
-                    <h2>⚡ Concurrency & Oversell Protection In Action</h2>
-                    <p>Simulate 20 concurrent shoppers attempting to buy the limited 10-unit flash serum simultaneously.</p>
+                    <h2>⚡ Flash Drop Engine — Concurrency & Oversell Protection</h2>
+                    <p>Demonstrates JPA Optimistic Locking (`@Version`): Simulate 20 concurrent shoppers competing for 10 units of the Flash Sale Serum simultaneously.</p>
                 </div>
                 <button class="btn-fire-test" id="runStressTestBtn">
                     <span>🚀 Fire 20 Concurrent Buyers</span>
@@ -93,15 +144,15 @@
                 </div>
                 <div class="metric-card conflict-card">
                     <div class="metric-num" id="metricConflict">0</div>
-                    <div class="metric-label">Conflicts Handled (409 Safe)</div>
+                    <div class="metric-label">Safe Conflicts Handled (409)</div>
                 </div>
                 <div class="metric-card stock-card">
                     <div class="metric-num" id="metricStock">-</div>
-                    <div class="metric-label">Remaining Stock (Strict 0)</div>
+                    <div class="metric-label">Final Stock (Strict 0)</div>
                 </div>
                 <div class="metric-card oversell-card">
                     <div class="metric-num" id="metricOversell">0</div>
-                    <div class="metric-label">Negative Oversell</div>
+                    <div class="metric-label">Oversold Units (Zero Error)</div>
                 </div>
             </div>
             <div class="stress-log" id="stressLog" style="display: none;"></div>
@@ -109,7 +160,7 @@
     </section>
 
     <!-- Main Catalog Section -->
-    <main class="catalog-section">
+    <main class="catalog-section" id="catalogAnchor">
         <div class="section-header">
             <div>
                 <h2>Trending Beauty Drops</h2>
@@ -118,15 +169,16 @@
             <div class="sort-wrapper">
                 <label for="sortSelect">Sort:</label>
                 <select id="sortSelect">
-                    <option value="createdAt">Newest First</option>
-                    <option value="price">Price: High to Low</option>
+                    <option value="featured">Featured First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
                 </select>
             </div>
         </div>
 
         <!-- Product Grid -->
         <div class="product-grid" id="productGrid">
-            <div class="loading-spinner">Loading catalog...</div>
+            <div class="loading-spinner">Curating beauty catalog...</div>
         </div>
     </main>
 
@@ -138,20 +190,20 @@
             <button class="btn-close" id="closeCartBtn">✕</button>
         </div>
         <div class="cart-body" id="cartItemsList">
-            <div class="empty-cart-msg">Your shopping bag is empty. Explore our catalog!</div>
+            <div class="empty-cart-msg">Your shopping bag is empty. Explore our luxury drops!</div>
         </div>
         <div class="cart-footer">
             <div class="cart-summary-row">
                 <span>Subtotal</span>
-                <span id="cartSubtotal">$0.00</span>
+                <span id="cartSubtotal">₹0</span>
             </div>
             <div class="cart-summary-row">
-                <span>Estimated Shipping</span>
+                <span>Standard Express Shipping</span>
                 <span class="free-text">FREE</span>
             </div>
             <div class="cart-summary-row total-row">
                 <span>Total Amount</span>
-                <span id="cartTotal">$0.00</span>
+                <span id="cartTotal">₹0</span>
             </div>
             <button class="btn-checkout" id="checkoutBtn" disabled>
                 🔒 Place Order with Idempotency Key
@@ -166,14 +218,14 @@
             <button class="btn-modal-close" id="closeAuthModalBtn">✕</button>
             <div class="auth-tabs">
                 <button class="auth-tab active" id="tabLogin">Sign In</button>
-                <button class="auth-tab" id="tabRegister">Register</button>
+                <button class="auth-tab" id="tabRegister">Create Account</button>
             </div>
 
             <!-- Login Form -->
             <form id="loginForm" class="auth-form">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" id="loginEmail" placeholder="test@glowcart.com" required value="test@glowcart.com">
+                    <input type="email" id="loginEmail" placeholder="mayank@glowcart.com" required value="mayank@glowcart.com">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
@@ -187,11 +239,11 @@
             <form id="registerForm" class="auth-form" style="display: none;">
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" id="regName" placeholder="Priya Sharma" required>
+                    <input type="text" id="regName" placeholder="Mayank Chauhan" required>
                 </div>
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" id="regEmail" placeholder="priya@example.com" required>
+                    <input type="email" id="regEmail" placeholder="mayank@example.com" required>
                 </div>
                 <div class="form-group">
                     <label>Password (min 8 characters)</label>
@@ -208,8 +260,8 @@
         <div class="modal-card receipt-card">
             <button class="btn-modal-close" id="closeOrderModalBtn">✕</button>
             <div class="receipt-icon">🎉</div>
-            <h2>Order Confirmed!</h2>
-            <p class="receipt-sub">Processed with atomic stock reservation</p>
+            <h2>Order Placed Successfully!</h2>
+            <p class="receipt-sub">Processed with atomic JPA stock reservation</p>
 
             <div class="receipt-details" id="receiptDetails"></div>
 
@@ -217,7 +269,7 @@
                 <button class="btn-simulate-webhook" id="simulatePaymentBtn">
                     💳 Simulate Mock Payment Webhook (PAID)
                 </button>
-                <button class="btn-done" id="orderDoneBtn">Back to Shopping</button>
+                <button class="btn-done" id="orderDoneBtn">Continue Shopping</button>
             </div>
         </div>
     </div>
@@ -225,18 +277,22 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
-    <!-- Footer -->
+    <!-- Production Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-brand">
                 <div class="brand-logo">✦ GlowCart</div>
-                <p>Engineered for high-volume beauty commerce. Modeled after real architectural scaling challenges.</p>
+                <p>High-performance beauty commerce engineered with sub-100ms Redis caching, optimistic locking, and idempotent checkout transactions.</p>
             </div>
             <div class="footer-links">
-                <a href="/swagger-ui.html" target="_blank">Swagger Documentation</a>
-                <a href="/v3/api-docs" target="_blank">OpenAPI JSON</a>
-                <a href="https://github.com/NotMayankfr/GlowCart" target="_blank">GitHub Repository</a>
+                <a href="/swagger-ui.html" target="_blank">Swagger UI</a>
+                <a href="/v3/api-docs" target="_blank">OpenAPI 3.0</a>
+                <a href="https://github.com/NotMayankfr/GlowCart" target="_blank">GitHub Source</a>
             </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 GlowCart Luxury Beauty. All rights reserved.</span>
+            <span class="made-by-badge">Made with ❤️ by <strong>Mayank Chauhan</strong></span>
         </div>
     </footer>
 
