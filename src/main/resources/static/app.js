@@ -214,7 +214,33 @@ const ALL_PRODUCTS = generateFullCatalog();
 let displayProducts = [...ALL_PRODUCTS];
 let activeCategoryFilter = '';
 let activePriceFilter = 'all';
-let cart = JSON.parse(localStorage.getItem('glowcart_bag_items') || '[]');
+
+function sanitizeCartItem(item) {
+    if (!item) return null;
+    const q = parseInt(item.qty || item.quantity, 10);
+    const validQty = (!isNaN(q) && q > 0) ? q : 1;
+    const price = parseFloat(item.price);
+    const validPrice = (!isNaN(price) && price >= 0) ? price : 0;
+    const mrp = parseFloat(item.mrp);
+    const validMrp = (!isNaN(mrp) && mrp >= validPrice) ? mrp : validPrice;
+    return {
+        ...item,
+        qty: validQty,
+        price: validPrice,
+        mrp: validMrp
+    };
+}
+
+let cart = (function() {
+    try {
+        const raw = JSON.parse(localStorage.getItem('glowcart_bag_items') || '[]');
+        if (!Array.isArray(raw)) return [];
+        return raw.map(sanitizeCartItem).filter(Boolean);
+    } catch (e) {
+        return [];
+    }
+})();
+
 let currentAuth = JSON.parse(localStorage.getItem('glowcart_auth') || 'null');
 let appliedCoupon = null;
 let lastPlacedOrder = null;
@@ -253,6 +279,10 @@ function bindUserInteractions() {
             e.target.classList.add('active');
             activeCategoryFilter = e.target.dataset.category.toLowerCase();
             applyAllFilters();
+            const catSec = document.getElementById('catalogSection');
+            if (catSec) {
+                catSec.scrollIntoView({ behavior: 'smooth' });
+            }
         });
     });
 
@@ -535,8 +565,11 @@ function updateBagQty(productId, delta) {
     const item = cart.find(i => i.id === productId);
     if (!item) return;
 
+    let currentQty = parseInt(item.qty || item.quantity, 10);
+    if (isNaN(currentQty) || currentQty < 1) currentQty = 1;
+
     const product = ALL_PRODUCTS.find(p => p.id === productId);
-    const newQty = item.qty + delta;
+    const newQty = currentQty + delta;
 
     if (newQty <= 0) {
         cart = cart.filter(i => i.id !== productId);
@@ -557,6 +590,9 @@ function saveBag() {
 }
 
 function updateBagUI() {
+    // Sanitize any corrupt data in cart
+    cart = cart.map(sanitizeCartItem).filter(Boolean);
+
     const container = document.getElementById('bagItemsContainer');
     const badge = document.getElementById('bagBadge');
     const headerCount = document.getElementById('bagHeaderCount');
@@ -566,25 +602,25 @@ function updateBagUI() {
     const discountRow = document.getElementById('bagDiscountRow');
     const couponSavingsEl = document.getElementById('bagCouponSavings');
 
-    const totalCount = cart.reduce((acc, i) => acc + i.qty, 0);
-    const totalAmount = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+    const totalCount = cart.reduce((acc, i) => acc + (parseInt(i.qty, 10) || 1), 0);
+    const totalAmount = cart.reduce((acc, i) => acc + ((parseFloat(i.price) || 0) * (parseInt(i.qty, 10) || 1)), 0);
 
-    badge.textContent = totalCount;
-    headerCount.textContent = `${totalCount} ${totalCount === 1 ? 'Item' : 'Items'}`;
-    mrpTotalEl.textContent = `₹${totalAmount.toLocaleString('en-IN')}`;
+    if (badge) badge.textContent = isNaN(totalCount) ? 0 : totalCount;
+    if (headerCount) headerCount.textContent = `${isNaN(totalCount) ? 0 : totalCount} ${totalCount === 1 ? 'Item' : 'Items'}`;
+    if (mrpTotalEl) mrpTotalEl.textContent = `₹${(isNaN(totalAmount) ? 0 : totalAmount).toLocaleString('en-IN')}`;
 
-    let grandTotal = totalAmount;
+    let grandTotal = isNaN(totalAmount) ? 0 : totalAmount;
     if (appliedCoupon && totalAmount > 0) {
         const discountAmount = Math.round(totalAmount * (appliedCoupon.percent / 100));
-        grandTotal = totalAmount - discountAmount;
-        discountRow.style.display = 'flex';
-        couponSavingsEl.textContent = `-₹${discountAmount.toLocaleString('en-IN')}`;
+        grandTotal = Math.max(0, totalAmount - discountAmount);
+        if (discountRow) discountRow.style.display = 'flex';
+        if (couponSavingsEl) couponSavingsEl.textContent = `-₹${discountAmount.toLocaleString('en-IN')}`;
     } else {
-        discountRow.style.display = 'none';
+        if (discountRow) discountRow.style.display = 'none';
     }
 
-    grandTotalEl.textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
-    checkoutBtn.disabled = totalCount === 0;
+    if (grandTotalEl) grandTotalEl.textContent = `₹${(isNaN(grandTotal) ? 0 : grandTotal).toLocaleString('en-IN')}`;
+    if (checkoutBtn) checkoutBtn.disabled = totalCount === 0;
 
     if (cart.length === 0) {
         container.innerHTML = `
@@ -610,13 +646,13 @@ function updateBagUI() {
                 <div class="bag-item-name">${escapeHtml(item.name)}</div>
                 
                 <div class="bag-item-price-row">
-                    <span class="bag-item-price">&#8377;${Number(item.price).toLocaleString('en-IN')}</span>
-                    ${item.mrp ? `<span class="mrp-strike">&#8377;${Number(item.mrp).toLocaleString('en-IN')}</span>` : ''}
+                    <span class="bag-item-price">&#8377;${(parseFloat(item.price) || 0).toLocaleString('en-IN')}</span>
+                    ${item.mrp ? `<span class="mrp-strike">&#8377;${(parseFloat(item.mrp) || 0).toLocaleString('en-IN')}</span>` : ''}
                 </div>
 
                 <div class="bag-item-qty-row">
                     <button class="qty-control-btn" onclick="updateBagQty(${item.id}, -1)">&minus;</button>
-                    <span style="font-size:0.85rem; font-weight:700;">${item.qty}</span>
+                    <span style="font-size:0.85rem; font-weight:700;">${parseInt(item.qty, 10) || 1}</span>
                     <button class="qty-control-btn" onclick="updateBagQty(${item.id}, 1)">&plus;</button>
                 </div>
             </div>
@@ -697,12 +733,13 @@ async function handleCheckout() {
         }
     } catch (err) {
         // High-fidelity fallback receipt
+        const safeTotal = cart.reduce((acc, i) => acc + ((parseFloat(i.price) || 0) * (parseInt(i.qty, 10) || 1)), 0);
         const fallbackOrder = {
             id: Math.floor(10000 + Math.random() * 90000),
             status: "CREATED",
-            totalAmount: cart.reduce((acc, i) => acc + (i.price * i.qty), 0),
+            totalAmount: isNaN(safeTotal) ? 0 : safeTotal,
             idempotencyKey: crypto.randomUUID(),
-            items: cart.map(i => ({ productName: i.name, quantity: i.qty, unitPrice: i.price }))
+            items: cart.map(i => ({ productName: i.name, quantity: parseInt(i.qty, 10) || 1, unitPrice: parseFloat(i.price) || 0 }))
         };
         lastPlacedOrder = fallbackOrder;
         cart = [];
@@ -714,18 +751,19 @@ async function handleCheckout() {
         displayReceipt(fallbackOrder);
     } finally {
         checkoutBtn.disabled = false;
-        checkoutBtn.textContent = "Proceed to Checkout with Idempotency Key";
+        checkoutBtn.textContent = "Proceed to Secure Checkout";
     }
 }
 
 function displayReceipt(order) {
     const content = document.getElementById('receiptContent');
+    const orderTotal = parseFloat(order.totalAmount) || 0;
     content.innerHTML = `
         <p><strong>Order Tracking:</strong> #GC-${order.id}</p>
         <p><strong>Status:</strong> <span style="color:#d97706; font-weight:800;">${order.status}</span></p>
-        <p><strong>Amount Paid:</strong> &#8377;${Number(order.totalAmount).toLocaleString('en-IN')}</p>
+        <p><strong>Amount Paid:</strong> &#8377;${orderTotal.toLocaleString('en-IN')}</p>
         <p style="font-family:monospace; font-size:0.74rem; word-break:break-all; margin-top:8px;">
-            <strong>Idempotency UUID:</strong><br>${order.idempotencyKey}
+            <strong>Transaction Reference:</strong><br>${order.idempotencyKey}
         </p>
     `;
     document.getElementById('receiptModal').classList.add('open');
@@ -1081,23 +1119,10 @@ function bindAiAdvisor() {
         addRoutineBtn.addEventListener('click', () => {
             if (!currentAiRoutine || currentAiRoutine.length === 0) return;
             currentAiRoutine.forEach(item => {
-                const existing = cart.find(i => i.id === item.product.id);
-                if (existing) {
-                    existing.quantity += 1;
-                } else {
-                    cart.push({
-                        id: item.product.id,
-                        name: item.product.name,
-                        brand: item.product.brand,
-                        price: item.product.price,
-                        mrp: item.product.mrp,
-                        image: item.product.image,
-                        quantity: 1
-                    });
+                if (item && item.product) {
+                    addToBag(item.product.id, 1);
                 }
             });
-            localStorage.setItem('glowcart_bag_items', JSON.stringify(cart));
-            updateBagUI();
             toggleModal(false);
             
             // Open bag drawer

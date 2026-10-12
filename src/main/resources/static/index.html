@@ -188,43 +188,6 @@
         </div>
     </section>
 
-    <!-- Interactive Concurrency Flash Sale Drop -->
-    <section class="concurrency-section reveal-on-scroll" id="stressSection">
-        <div class="concurrency-card">
-            <div class="concurrency-header">
-                <div>
-                    <span class="concurrency-pill">REAL-TIME INVENTORY ENGINE</span>
-                    <h2>Concurrency & Oversell Protection Showcase</h2>
-                    <p>Simulate 20 concurrent shoppers attempting to purchase 10 units of the Flash Sale Elixir at the exact same millisecond. Powered by JPA Optimistic Locking.</p>
-                </div>
-                <button class="btn-fire-concurrency" id="runConcurrencyBtn">
-                    Fire 20 Concurrent Buyers
-                </button>
-            </div>
-
-            <div class="concurrency-metrics" id="concurrencyMetrics" style="display: none;">
-                <div class="metric-box box-success">
-                    <span class="metric-val" id="metricSuccess">0</span>
-                    <span class="metric-lbl">Orders Placed (201 Created)</span>
-                </div>
-                <div class="metric-box box-conflict">
-                    <span class="metric-val" id="metricConflict">0</span>
-                    <span class="metric-lbl">Conflicts Caught (409 Safe)</span>
-                </div>
-                <div class="metric-box box-stock">
-                    <span class="metric-val" id="metricStock">0</span>
-                    <span class="metric-lbl">Final Stock (Strict 0)</span>
-                </div>
-                <div class="metric-box box-zero">
-                    <span class="metric-val" id="metricOversell">0</span>
-                    <span class="metric-lbl">Negative Oversell</span>
-                </div>
-            </div>
-
-            <div class="concurrency-log" id="concurrencyLog" style="display: none;"></div>
-        </div>
-    </section>
-
     <!-- Horizontal Carousel: Trending Best Sellers -->
     <section class="carousel-section reveal-on-scroll">
         <div class="carousel-header">
@@ -274,6 +237,43 @@
         <!-- 100+ Products Grid -->
         <div class="catalog-grid" id="catalogGrid">
             <div class="catalog-loading">Loading curated 100+ beauty catalog...</div>
+        </div>
+    </section>
+
+    <!-- Interactive Concurrency Flash Sale Drop -->
+    <section class="concurrency-section reveal-on-scroll" id="stressSection">
+        <div class="concurrency-card">
+            <div class="concurrency-header">
+                <div>
+                    <span class="concurrency-pill">REAL-TIME INVENTORY ENGINE</span>
+                    <h2>Concurrency & Oversell Protection Showcase</h2>
+                    <p>Simulate 20 concurrent shoppers attempting to purchase 10 units of the Flash Sale Elixir at the exact same millisecond. Powered by JPA Optimistic Locking.</p>
+                </div>
+                <button class="btn-fire-concurrency" id="runConcurrencyBtn">
+                    Fire 20 Concurrent Buyers
+                </button>
+            </div>
+
+            <div class="concurrency-metrics" id="concurrencyMetrics" style="display: none;">
+                <div class="metric-box box-success">
+                    <span class="metric-val" id="metricSuccess">0</span>
+                    <span class="metric-lbl">Orders Placed (201 Created)</span>
+                </div>
+                <div class="metric-box box-conflict">
+                    <span class="metric-val" id="metricConflict">0</span>
+                    <span class="metric-lbl">Conflicts Caught (409 Safe)</span>
+                </div>
+                <div class="metric-box box-stock">
+                    <span class="metric-val" id="metricStock">0</span>
+                    <span class="metric-lbl">Final Stock (Strict 0)</span>
+                </div>
+                <div class="metric-box box-zero">
+                    <span class="metric-val" id="metricOversell">0</span>
+                    <span class="metric-lbl">Negative Oversell</span>
+                </div>
+            </div>
+
+            <div class="concurrency-log" id="concurrencyLog" style="display: none;"></div>
         </div>
     </section>
 
@@ -329,9 +329,9 @@
             </div>
 
             <button class="btn-checkout-order" id="checkoutOrderBtn" disabled>
-                Proceed to Checkout with Idempotency Key
+                Proceed to Secure Checkout
             </button>
-            <p class="checkout-guarantee">Secured by JPA Optimistic Locking. Protected against double charges.</p>
+            <p class="checkout-guarantee">Safe &amp; Secure Checkout &bull; 100% Authentic Beauty Guarantee</p>
         </div>
     </aside>
 
@@ -582,7 +582,7 @@
         <div class="footer-upper">
             <div class="footer-col brand-col">
                 <span class="footer-logo">GLOWCART</span>
-                <p>India's high-performance luxury beauty destination. Engineered for sub-100ms catalog discovery, optimistic-locking stock protection, and idempotent order transactions.</p>
+                <p>India's premier luxury beauty destination. Discover 100+ dermatologically verified formulas, couture pigments, and bespoke artisanal fragrances.</p>
                 <div class="footer-security-badges">
                     <span>100% Genuine Products</span> &bull;
                     <span>Free Shipping</span> &bull;
